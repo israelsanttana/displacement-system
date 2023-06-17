@@ -5,7 +5,8 @@ import MiniDrawer from './components/sidebar'
 export default function Home() {
   return (
     <main>
-      <MiniDrawer />
+      <h1>olá</h1>
+
     </main>
   )
 }
