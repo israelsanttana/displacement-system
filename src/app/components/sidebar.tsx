@@ -146,7 +146,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                 <List>
                     {['Deslocamentos', 'Clientes', 'Condutores', 'Veiculos'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <Link href={`/${text}`} passHref>
+                            <Link style={{ textDecoration: 'none', color: 'black' }} href={`/${text}`} passHref>
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,
@@ -167,34 +167,9 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                                 </ListItemButton>
                             </Link>
                         </ListItem>
-
                     ))}
                 </List>
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 10 }}>
                 {children}
