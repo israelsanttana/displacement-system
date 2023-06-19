@@ -3,10 +3,11 @@ import styles from './page.module.css'
 import MiniDrawer from './components/sidebar'
 
 export default function Home() {
-  return (
-    <main>
-      <h1>olá</h1>
+  return <>
+    <h2>Página Home</h2>
+  </>
 
-    </main>
-  )
+
+
+
 }

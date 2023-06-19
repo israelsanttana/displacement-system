@@ -144,7 +144,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['users', 'Em rota', 'Send email', 'Drafts'].map((text, index) => (
+                    {['Deslocamentos', 'Clientes', 'Condutores', 'Veiculos'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <Link href={`/${text}`} passHref>
                                 <ListItemButton
@@ -196,11 +196,8 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                     ))}
                 </List>
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-                <Typography >
-                    {children}
-                </Typography>
+            <Box component="main" sx={{ flexGrow: 1, p: 10 }}>
+                {children}
             </Box>
         </Box>
     );
