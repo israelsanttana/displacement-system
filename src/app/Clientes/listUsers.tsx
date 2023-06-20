@@ -9,9 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
-import { Container, Modal, TextField, Typography } from '@mui/material';
-
-
+import { TextField, Typography } from '@mui/material';
+import ModalClient from '../components/modal-client';
 
 
 
@@ -29,7 +28,8 @@ export interface UserProps {
             uf: string
         }
 
-    ]
+    ],
+    post: TypeUser
 
 }
 
@@ -46,100 +46,24 @@ export interface TypeUser {
 }
 
 
-export default function BasicTable({ users }: UserProps) {
+export default function TableClient({ users, post }: UserProps) {
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
 
 
     return (
         <>
+            {isModalOpen && <ModalClient open={isModalOpen} onClose={handleCloseModal} post={post} />}
 
-            <div>
-                <Modal
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Container maxWidth="sm">
-                        <Box
-                            component="form"
-                            sx={{
-                                '& .MuiTextField-root': { m: 2, width: '28ch' },
-                                width: 700,
-                                height: 400,
-                                bgcolor: '#ffffff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                                flexWrap: 'wrap'
-
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Required"
-                                defaultValue="Hello World"
-                            />
-
-                        </Box>
-                    </Container>
-
-                </Modal>
-            </div>
             <Box component="div"
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 3 }}>
 
@@ -154,7 +78,7 @@ export default function BasicTable({ users }: UserProps) {
                     sx={{ m: 1, width: '50ch' }}
                 />
 
-                <Button onClick={handleOpen} color="primary" variant="contained" >
+                <Button onClick={handleOpenModal} color="primary" variant="contained" >
                     Cadastrar
                 </Button>
 
@@ -200,6 +124,7 @@ export default function BasicTable({ users }: UserProps) {
             </TableContainer>
         </>
     );
+
 
 }
 
