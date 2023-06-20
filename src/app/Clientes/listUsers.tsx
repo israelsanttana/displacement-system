@@ -9,31 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
-import { TextField } from '@mui/material';
-
-
-
-
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-
-
-];
-
+import { Container, Modal, TextField, Typography } from '@mui/material';
 
 
 
@@ -70,24 +46,118 @@ export interface TypeUser {
 }
 
 
-
 export default function BasicTable({ users }: UserProps) {
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
 
     return (
         <>
+
+            <div>
+                <Modal
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Container maxWidth="sm">
+                        <Box
+                            component="form"
+                            sx={{
+                                '& .MuiTextField-root': { m: 2, width: '28ch' },
+                                width: 700,
+                                height: 400,
+                                bgcolor: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                                flexWrap: 'wrap'
+
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Required"
+                                defaultValue="Hello World"
+                            />
+
+                        </Box>
+                    </Container>
+
+                </Modal>
+            </div>
             <Box component="div"
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 3 }}>
 
-                <h2>Clientes</h2>
+                <Typography variant="h4" >
+                    Clientes
+                </Typography>
 
                 <TextField id="outlined-basic"
-                    label="Buscar"
+                    label="Buscar..."
                     variant="outlined"
                     size="small"
                     sx={{ m: 1, width: '50ch' }}
                 />
 
-                <Button variant="outlined">Cadastrar</Button>
+                <Button onClick={handleOpen} color="primary" variant="contained" >
+                    Cadastrar
+                </Button>
+
 
             </Box >
 
@@ -122,8 +192,7 @@ export default function BasicTable({ users }: UserProps) {
                                 <TableCell align="right">{user.bairro}</TableCell>
                                 <TableCell align="right">{user.cidade}</TableCell>
                                 <TableCell align="right">{user.uf}</TableCell>
-                                <TableCell align="right"><Button variant="text">Text</Button></TableCell>
-
+                                <TableCell align="right"><Button color="primary" variant="outlined">Editar</Button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -131,4 +200,6 @@ export default function BasicTable({ users }: UserProps) {
             </TableContainer>
         </>
     );
+
 }
+
