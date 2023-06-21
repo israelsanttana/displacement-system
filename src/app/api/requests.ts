@@ -24,7 +24,12 @@ export const getReqClient = async (endpoint: string) => {
 
 export const postReqClient = async (endpoint: string, dados: any) => {
     try {
-        const response: AxiosResponse = await axios.post(`${baseURL}/${endpoint}`, dados);
+        const response: AxiosResponse = await axios.post(`${baseURL}/${endpoint}`, dados, {
+            headers: {
+                'accept': 'text/plain',
+                'Content-Type': 'application/json',
+            },
+        });
         return response.data;
     } catch (error) {
         handleError;

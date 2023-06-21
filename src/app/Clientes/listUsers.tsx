@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,10 +28,10 @@ export interface UserType {
 export default function TableClient() {
     const { getAPIClient } = useAPI();
     const [users, setUsers] = useState<UserType[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-
             const response = await getAPIClient('v1/Cliente');
             setUsers(response);
         };
@@ -40,7 +39,12 @@ export default function TableClient() {
         fetchData();
     }, [getAPIClient]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const updateTable = async () => {
+        const response = await getAPIClient('v1/Cliente');
+        setUsers(response);
+    };
+
+
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -52,7 +56,7 @@ export default function TableClient() {
 
     return (
         <>
-            {isModalOpen && <ModalClient open={isModalOpen} onClose={handleCloseModal} />}
+            {isModalOpen && <ModalClient open={isModalOpen} onClose={handleCloseModal} onUpdateTable={updateTable} />}
 
             <Box component="div"
                 sx={{
