@@ -1,7 +1,9 @@
 'use client'
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { Modal, Container, TextField, Button } from "@mui/material";
+import { Modal, Container, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useAPI } from '../Context/AppContext';
+import React from "react";
+
 
 interface FormState {
 
@@ -25,6 +27,8 @@ export interface ModalClientProps {
 export default function ModalClient({ open, onClose, onUpdateTable }: ModalClientProps) {
     const { postAPIClient } = useAPI();
 
+    const [age, setAge] = React.useState('');
+
     const [formState, setFormState] = useState<FormState>({
         numeroDocumento: "77777777",
         tipoDocumento: "cpf",
@@ -35,6 +39,11 @@ export default function ModalClient({ open, onClose, onUpdateTable }: ModalClien
         cidade: "São Paulo",
         uf: "SP",
     });
+
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setAge(event.target.value as string);
+    };
 
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -53,79 +62,132 @@ export default function ModalClient({ open, onClose, onUpdateTable }: ModalClien
     };
 
     return (
-        <Modal
-            sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-            open={open}
-            onClose={onClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Container maxWidth="sm" sx={{ bgcolor: "#ffffff" }}>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        name="input1"
-                        label="Input 1"
-                        value={formState.nome}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
-                        name="input2"
-                        label="Input 2"
-                        value={formState.numeroDocumento}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
+
+        <Dialog open={open}
+            onClose={onClose}>
+            <DialogTitle>Novo cadastro</DialogTitle>
+            <DialogContent onSubmit={handleSubmit}>
+                <DialogContentText sx={{ pb: 4 }}>
+                    To subscribe to this website, please enter your email address here. We
+                    will send updates occasionally.
+                </DialogContentText>
+                <Grid container spacing={3} >
+                    <Grid item xs={12} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="nome"
+                            label="Nome"
+                            value={formState.nome}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={3} >
+                        <Select
+                            fullWidth
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={age}
+                            label="Age"
+                            name="input1"
+                            variant="outlined"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={10}>CPF</MenuItem>
+                            <MenuItem value={20}>RG</MenuItem>
+
+                        </Select>
+
+                    </Grid>
+                    <Grid item xs={9} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="cpf"
+                            label="CPF"
+                            value={formState.numeroDocumento}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+                    {/*  <TextField
+                        variant="outlined"
                         name="input3"
                         label="Input 3"
                         value={formState.tipoDocumento}
                         onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
-                        name="input4"
-                        label="Input 4"
-                        value={formState.logradouro}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
-                        name="input5"
-                        label="Input 5"
-                        value={formState.numero}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
-                        name="input6"
-                        label="Input 6"
-                        value={formState.bairro}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <TextField
-                        name="input7"
-                        label="Input 7"
-                        value={formState.cidade}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        name="input7"
-                        label="Input 7"
-                        value={formState.uf}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <Button variant="contained" color="primary" type="submit">
-                        Enviar
-                    </Button>
-                </form>
-            </Container>
-        </Modal>
+                    /> */}
+                    <Grid item xs={9} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="logradouro"
+                            label="Rua"
+                            value={formState.logradouro}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={3} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="numero"
+                            label="Número"
+                            value={formState.numero}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={5} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="bairro"
+                            label="Bairro"
+                            value={formState.bairro}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={5} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="cidaded"
+                            label="Cidade"
+                            value={formState.cidade}
+                            onChange={handleInputChange}
+                        />
+
+
+                    </Grid>
+
+                    <Grid item xs={2} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="Estado"
+                            label="Estado"
+                            value={formState.uf}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
+
+
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleSubmit}>Cadastrar</Button>
+                <Button variant="outlined" color="error" onClick={onClose}>Cancelar</Button>
+            </DialogActions>
+        </Dialog>
     );
 }

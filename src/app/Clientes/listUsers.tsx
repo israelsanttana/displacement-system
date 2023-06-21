@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +12,8 @@ import Box from '@mui/material/Box';
 import { TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import ModalClient from '../components/modal-client';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export interface UserType {
     id: number;
@@ -29,22 +31,26 @@ export default function TableClient() {
     const { getAPIClient } = useAPI();
     const [users, setUsers] = useState<UserType[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await getAPIClient('v1/Cliente');
-            setUsers(response);
-        };
-
         fetchData();
-    }, [getAPIClient]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const updateTable = async () => {
+    const fetchData = async () => {
         const response = await getAPIClient('v1/Cliente');
         setUsers(response);
     };
 
-
+    const updateTable = async () => {
+        if (searchValue.trim() === '') {
+            fetchData();
+        } else {
+            const response = await getAPIClient(`v1/Cliente?search=${searchValue}`);
+            setUsers(response);
+        }
+    };
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -52,6 +58,10 @@ export default function TableClient() {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(event.target.value);
     };
 
     return (
@@ -72,6 +82,8 @@ export default function TableClient() {
                     variant="outlined"
                     size="small"
                     sx={{ m: 1, width: '50ch' }}
+                    value={searchValue}
+                    onChange={handleSearchChange}
                 />
                 <Button onClick={handleOpenModal}
                     color="primary"
@@ -113,9 +125,15 @@ export default function TableClient() {
                                     <TableCell align="right">{user.cidade}</TableCell>
                                     <TableCell align="right">{user.uf}</TableCell>
                                     <TableCell align="right">
-                                        <Button color="primary" variant="outlined">
-                                            Editar
+
+                                        <Button sx={{ color: '#707070' }}>
+                                            <EditIcon />
                                         </Button>
+
+                                        <Button sx={{ color: '#707070' }}>
+                                            <DeleteIcon />
+                                        </Button>
+
                                     </TableCell>
                                 </TableRow>
                             ))}
