@@ -1,7 +1,7 @@
 "use client"
-import { useState } from "react";
-import { Modal, Container, Box, FormControl, TextField, Button } from "@mui/material";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { Modal, Container, Box, TextField, Button } from "@mui/material";
+
 
 export interface TypeUser {
     id: number,
@@ -19,11 +19,12 @@ export interface TypeUser {
 export interface ModalClientProps {
     open: boolean,
     onClose: () => void,
-    post: TypeUser
 
 }
 
-export default function ModalClient({ open, onClose, post }: ModalClientProps) {
+export default function ModalClient({ open, onClose, }: ModalClientProps) {
+
+
 
     const handleClose = () => {
         onClose();

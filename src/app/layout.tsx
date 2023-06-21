@@ -1,6 +1,7 @@
 import MiniDrawer from './components/sidebar'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import { APIProvider } from './Context/AppContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,10 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
 
-        <MiniDrawer>
-          {children}
-        </MiniDrawer>
-
+        <APIProvider>
+          <MiniDrawer>
+            {children}
+          </MiniDrawer>
+        </APIProvider>
 
       </body >
     </html >
