@@ -1,6 +1,6 @@
 'use client'
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { Modal, Container, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useAPI } from '../Context/AppContext';
 import React from "react";
 
@@ -22,12 +22,14 @@ export interface ModalClientProps {
     open: boolean;
     onClose: () => void;
     onUpdateTable: () => void;
+    mode: "register" | "edit"
 }
 
-export default function ModalClient({ open, onClose, onUpdateTable }: ModalClientProps) {
+export default function ModalClient({ open, mode, onClose, onUpdateTable }: ModalClientProps) {
     const { postAPIClient } = useAPI();
-
     const [age, setAge] = React.useState('');
+
+
 
     const [formState, setFormState] = useState<FormState>({
         numeroDocumento: "77777777",
@@ -65,7 +67,9 @@ export default function ModalClient({ open, onClose, onUpdateTable }: ModalClien
 
         <Dialog open={open}
             onClose={onClose}>
-            <DialogTitle>Novo cadastro</DialogTitle>
+            <DialogTitle>
+                {mode === "register" ? "Novo cadastro" : "Editar cadastro"}
+            </DialogTitle>
             <DialogContent onSubmit={handleSubmit}>
                 <DialogContentText sx={{ pb: 4 }}>
                     To subscribe to this website, please enter your email address here. We
@@ -180,13 +184,25 @@ export default function ModalClient({ open, onClose, onUpdateTable }: ModalClien
 
                     </Grid>
 
-
-
                 </Grid>
             </DialogContent>
+
             <DialogActions>
-                <Button variant="outlined" onClick={handleSubmit}>Cadastrar</Button>
-                <Button variant="outlined" color="error" onClick={onClose}>Cancelar</Button>
+                {mode === "register" && (
+                    <>
+                        <Button variant="outlined" onClick={handleSubmit}>
+                            Cadastrar
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={onClose}>
+                            Cancelar
+                        </Button>
+                    </>
+                )}
+                {mode === "edit" && (
+                    <Button variant="outlined" onClick={handleSubmit}>
+                        Salvar
+                    </Button>
+                )}
             </DialogActions>
         </Dialog>
     );

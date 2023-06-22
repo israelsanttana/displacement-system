@@ -27,9 +27,12 @@ export interface UserType {
     uf: string;
 }
 
+
 export default function TableClient() {
-    const { getAPIClient } = useAPI();
+    const { getAPIClient, deleteAPIClient } = useAPI();
     const [users, setUsers] = useState<UserType[]>([]);
+    const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
 
@@ -64,9 +67,35 @@ export default function TableClient() {
         setSearchValue(event.target.value);
     };
 
+    const handleDeleteUser = async (id: number) => {
+        try {
+            await deleteAPIClient(id);
+            updateTable();
+        } catch (error) {
+            console.error('Ocorreu um erro ao deletar o usuário:', error);
+        }
+    };
+
+    const handleOpenRegisterModal = () => {
+        setModalMode('register');
+        setIsModalOpen(true);
+    };
+
+    const handleOpenEditModal = () => {
+        setModalMode('edit');
+        setIsModalOpen(true);
+    };
+
     return (
         <>
-            {isModalOpen && <ModalClient open={isModalOpen} onClose={handleCloseModal} onUpdateTable={updateTable} />}
+            {isModalOpen && (
+                <ModalClient
+                    mode={modalMode}
+                    open={isModalOpen}
+                    onClose={handleCloseModal}
+                    onUpdateTable={updateTable}
+                />
+            )}
 
             <Box component="div"
                 sx={{
@@ -85,7 +114,7 @@ export default function TableClient() {
                     value={searchValue}
                     onChange={handleSearchChange}
                 />
-                <Button onClick={handleOpenModal}
+                <Button id='RegisterButton' onClick={handleOpenRegisterModal}
                     color="primary"
                     variant="contained"
                 >
@@ -125,15 +154,15 @@ export default function TableClient() {
                                     <TableCell align="right">{user.cidade}</TableCell>
                                     <TableCell align="right">{user.uf}</TableCell>
                                     <TableCell align="right">
-
-                                        <Button sx={{ color: '#707070' }}>
+                                        <Button id='EditButton' onClick={handleOpenEditModal} sx={{ color: '#707070' }}>
                                             <EditIcon />
                                         </Button>
-
-                                        <Button sx={{ color: '#707070' }}>
+                                        <Button
+                                            sx={{ color: '#707070' }}
+                                            onClick={() => handleDeleteUser(user.id)}
+                                        >
                                             <DeleteIcon />
                                         </Button>
-
                                     </TableCell>
                                 </TableRow>
                             ))}

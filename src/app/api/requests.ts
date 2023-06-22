@@ -31,10 +31,12 @@ export const postReqClient = async (endpoint: string, dados: any) => {
             },
         });
         return response.data;
+
     } catch (error) {
         handleError;
     }
 };
+
 
 
 export const putReqClient = async (endpoint: string, dados: any) => {
@@ -47,9 +49,17 @@ export const putReqClient = async (endpoint: string, dados: any) => {
 };
 
 
-export const deleteReqClient = async (endpoint: string) => {
+export const deleteReqClient = async (id: number) => {
     try {
-        const response: AxiosResponse = await axios.delete(`${baseURL}/${endpoint}`);
+        const response: AxiosResponse = await axios.delete(`${baseURL}/v1/Cliente/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            },
+            data: {
+                id: id
+            }
+        });
         return response.data;
     } catch (error) {
         handleError;

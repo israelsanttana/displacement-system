@@ -7,7 +7,7 @@ interface API {
     getAPIClient: (endpoint: string) => Promise<any>;
     postAPIClient: (endpoint: string, dados: any) => Promise<any>;
     putAPIClient: (endpoint: string, dados: any) => Promise<any>;
-    deleteAPIClient: (endpoint: string) => Promise<any>;
+    deleteAPIClient: (id: number) => Promise<any>;
 }
 
 interface APIProviderProps {
@@ -36,8 +36,8 @@ export const APIProvider = ({ children }: APIProviderProps) => {
     };
 
 
-    const deleteAPIClient = async (endpoint: string) => {
-        const data = await deleteReqClient(endpoint);
+    const deleteAPIClient = async (id: number) => {
+        const data = await deleteReqClient(id);
         return data;
     };
 

@@ -17,10 +17,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Link from 'next/link';
-import { Children } from 'react';
+import MapIcon from '@mui/icons-material/Map';
+import PeopleIcon from '@mui/icons-material/People';
+import RecentActorsIcon from '@mui/icons-material/RecentActors';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+
 
 
 
@@ -112,6 +114,29 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
         setOpen(false);
     };
 
+    const LinksSidebar = [
+        {
+            title: 'Deslocamentos',
+            href: '/Deslocamentos',
+            icon: <MapIcon />
+        },
+        {
+            title: 'Clientes',
+            href: '/Clientes',
+            icon: <PeopleIcon />
+        },
+        {
+            title: 'Condutores',
+            href: '/Condutores',
+            icon: <RecentActorsIcon />
+        },
+        {
+            title: 'Veiculos',
+            href: '/Veiculos',
+            icon: <DirectionsCarIcon />
+        }
+    ]
+
 
 
     return (
@@ -144,9 +169,9 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Deslocamentos', 'Clientes', 'Condutores', 'Veiculos'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <Link style={{ textDecoration: 'none', color: 'black' }} href={`/${text}`} passHref>
+                    {LinksSidebar.map((link) => (
+                        <ListItem key={link.title} disablePadding sx={{ display: 'block' }}>
+                            <Link style={{ textDecoration: 'none', color: 'black' }} href={link.href} passHref>
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,
@@ -161,9 +186,10 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                        {link.icon}
                                     </ListItemIcon>
-                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+
+                                    <ListItemText primary={link.title} sx={{ opacity: open ? 1 : 0 }} />
                                 </ListItemButton>
                             </Link>
                         </ListItem>
