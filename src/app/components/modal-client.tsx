@@ -85,7 +85,7 @@ export default function ModalClient({ open, mode, user, onClose, onUpdateTable }
                 {mode === "register" ? "Novo cadastro" : "Editar registro"}
             </DialogTitle>
             <DialogContent onSubmit={handleSubmit}>
-                <DialogContentText sx={{ pb: 4 }}>
+                <DialogContentText sx={{ pb: 1 }}>
                 </DialogContentText>
                 <Grid container spacing={3} >
                     <Grid item xs={12} >

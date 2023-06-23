@@ -1,5 +1,3 @@
-
-
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 
@@ -65,3 +63,15 @@ export const deleteReqClient = async (id: number) => {
         handleError;
     }
 };
+
+/* REQ DRIVERS*/
+
+export const getReqDrivers = async (endpoint: string) => {
+    try {
+        const response: AxiosResponse = await axios.get(`${baseURL}/${endpoint}`);
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
+

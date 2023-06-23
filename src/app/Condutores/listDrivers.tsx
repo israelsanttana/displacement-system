@@ -8,32 +8,27 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { Container, Grid, TextField, Typography } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
-import ModalClient from '../components/modal-client';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { format } from 'date-fns';
 
-export interface UserType {
+export interface DriverType {
     id: number;
-    numeroDocumento: string;
-    tipoDocumento: string;
     nome: string;
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
+    numeroHabilitacao: string,
+    catergoriaHabilitacao: string;
+    vencimentoHabilitacao: string;
 }
 
 
-export default function TableClient() {
-    const { getAPIClient, deleteAPIClient } = useAPI();
-    const [users, setUsers] = useState<UserType[]>([]);
+export default function TableDrivers() {
+    const { getAPIDrivers, deleteAPIClient } = useAPI();
+    const [driver, setDriver] = useState<DriverType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editUser, setEditUser] = useState<UserType | null>(null);
+    const [editUser, setEditUser] = useState<DriverType | null>(null);
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
@@ -42,16 +37,16 @@ export default function TableClient() {
     }, []);
 
     const fetchData = async () => {
-        const response = await getAPIClient('v1/Cliente');
-        setUsers(response);
+        const response = await getAPIDrivers('v1/Condutor');
+        setDriver(response);
     };
 
     const updateTable = async () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIClient(`v1/Cliente?search=${searchValue}`);
-            setUsers(response);
+            const response = await getAPIDrivers(`v1/Condutor?search=${searchValue}`);
+            setDriver(response);
         }
     };
 
@@ -77,7 +72,7 @@ export default function TableClient() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEditModal = (user: UserType) => {
+    const handleOpenEditModal = (user: DriverType) => {
         setModalMode('edit');
         setEditUser(user);
         setIsModalOpen(true);
@@ -86,13 +81,15 @@ export default function TableClient() {
 
     return (
         <>
-            <ModalClient
-                mode={modalMode}
-                open={isModalOpen}
-                onClose={handleCloseModal}
-                onUpdateTable={updateTable}
-                user={editUser}
-            />
+            {
+                /* <ModalClient
+                    mode={modalMode}
+                    open={isModalOpen}
+                    onClose={handleCloseModal}
+                    onUpdateTable={updateTable}
+                    user={editUser}
+                /> */
+            }
 
             <Grid container spacing={1} sx={{ mb: 3, mt: 3, flexWrap: 'wrap' }}
                 columnSpacing={{ xs: 1, sm: 3, md: 3 }}
@@ -100,7 +97,7 @@ export default function TableClient() {
 
                 <Grid item xs={12} md={4}>
 
-                    <Typography variant="h4">Clientes</Typography>
+                    <Typography variant="h4">Condutores</Typography>
 
                 </Grid>
 
@@ -135,39 +132,44 @@ export default function TableClient() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Nome</TableCell>
-                            <TableCell align="right">CPF</TableCell>
-                            <TableCell align="right">Rua</TableCell>
-                            <TableCell align="right">Numero</TableCell>
-                            <TableCell align="right">Bairro</TableCell>
-                            <TableCell align="right">Cidade</TableCell>
-                            <TableCell align="right">Estado</TableCell>
+                            <TableCell align="right">Nº Habilitação</TableCell>
+                            <TableCell align="right">Categoria</TableCell>
+                            <TableCell align="right">Vencimento</TableCell>
                             <TableCell align="right">Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.length === 0 ? (
+
+                        {driver.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={9}>Carregando...</TableCell>
                             </TableRow>
                         ) :
-                            users.map((user: UserType) => (
-                                <TableRow key={user.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            driver.map((driver: DriverType) => (
+                                <TableRow key={driver.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell component="th" scope="row">
-                                        {user.nome}
+                                        {driver.nome}
                                     </TableCell>
-                                    <TableCell align="right">{user.numeroDocumento}</TableCell>
-                                    <TableCell align="right">{user.logradouro}</TableCell>
-                                    <TableCell align="right">{user.numero}</TableCell>
-                                    <TableCell align="right">{user.bairro}</TableCell>
-                                    <TableCell align="right">{user.cidade}</TableCell>
-                                    <TableCell align="right">{user.uf}</TableCell>
                                     <TableCell align="right">
-                                        <Button id='EditButton' onClick={() => handleOpenEditModal(user)} sx={{ color: '#707070' }}>
+                                        {driver.numeroHabilitacao}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {driver.catergoriaHabilitacao}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {format
+                                            (new Date
+                                                (driver.vencimentoHabilitacao),
+                                                'dd/MM/yyyy')}
+                                    </TableCell>
+
+                                    <TableCell align="right">
+                                        <Button id='EditButton' onClick={() => handleOpenEditModal(driver)} sx={{ color: '#707070' }}>
                                             <EditIcon />
                                         </Button>
                                         <Button
                                             sx={{ color: '#707070' }}
-                                            onClick={() => handleDeleteUser(user.id)}
+                                            onClick={() => handleDeleteUser(driver.id)}
                                         >
                                             <DeleteIcon />
                                         </Button>
