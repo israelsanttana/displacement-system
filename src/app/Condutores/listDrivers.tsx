@@ -24,7 +24,7 @@ export interface DriverType {
 
 
 export default function TableDrivers() {
-    const { getAPIDrivers, deleteAPIClient } = useAPI();
+    const { getAPIDrivers, deleteAPIDrivers } = useAPI();
     const [driver, setDriver] = useState<DriverType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,9 +58,9 @@ export default function TableDrivers() {
         setSearchValue(event.target.value);
     };
 
-    const handleDeleteUser = async (id: number) => {
+    const handleDeleteDrive = async (id: number) => {
         try {
-            await deleteAPIClient(id);
+            await deleteAPIDrivers(id);
             updateTable();
         } catch (error) {
             console.error('Ocorreu um erro ao deletar o usuário:', error);
@@ -169,7 +169,7 @@ export default function TableDrivers() {
                                         </Button>
                                         <Button
                                             sx={{ color: '#707070' }}
-                                            onClick={() => handleDeleteUser(driver.id)}
+                                            onClick={() => handleDeleteDrive(driver.id)}
                                         >
                                             <DeleteIcon />
                                         </Button>

@@ -75,3 +75,20 @@ export const getReqDrivers = async (endpoint: string) => {
     }
 };
 
+export const deleteReqDrivers = async (id: number) => {
+    try {
+        const response: AxiosResponse = await axios.delete(`${baseURL}/v1/Condutor/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            },
+            data: {
+                id: id
+            }
+        });
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
+
