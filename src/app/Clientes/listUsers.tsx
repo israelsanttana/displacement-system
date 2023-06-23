@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { TextField, Typography } from '@mui/material';
+import { Container, Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import ModalClient from '../components/modal-client';
 import EditIcon from '@mui/icons-material/Edit';
@@ -32,8 +32,8 @@ export default function TableClient() {
     const { getAPIClient, deleteAPIClient } = useAPI();
     const [users, setUsers] = useState<UserType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editUser, setEditUser] = useState<UserType | null>(null);
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
@@ -53,10 +53,6 @@ export default function TableClient() {
             const response = await getAPIClient(`v1/Cliente?search=${searchValue}`);
             setUsers(response);
         }
-    };
-
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
@@ -81,47 +77,57 @@ export default function TableClient() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEditModal = () => {
+    const handleOpenEditModal = (user: UserType) => {
         setModalMode('edit');
+        setEditUser(user);
         setIsModalOpen(true);
     };
 
+
     return (
         <>
-            {isModalOpen && (
-                <ModalClient
-                    mode={modalMode}
-                    open={isModalOpen}
-                    onClose={handleCloseModal}
-                    onUpdateTable={updateTable}
-                />
-            )}
+            <ModalClient
+                mode={modalMode}
+                open={isModalOpen}
+                onClose={handleCloseModal}
+                onUpdateTable={updateTable}
+                user={editUser}
+            />
 
-            <Box component="div"
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center', m: 3
-                }}
-            >
-                <Typography variant="h4">Clientes</Typography>
+            <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, mt: 3 }}>
 
-                <TextField id="outlined-basic"
-                    label="Buscar..."
-                    variant="outlined"
-                    size="small"
-                    sx={{ m: 1, width: '50ch' }}
-                    value={searchValue}
-                    onChange={handleSearchChange}
-                />
-                <Button id='RegisterButton' onClick={handleOpenRegisterModal}
-                    color="primary"
-                    variant="contained"
-                >
-                    Cadastrar
-                </Button>
-            </Box>
+                <Grid item xs={12} md={4}>
 
+                    <Typography variant="h4">Clientes</Typography>
+
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+
+                    <TextField id="outlined-basic"
+                        fullWidth
+                        label="Buscar..."
+                        variant="outlined"
+                        size="small"
+                        value={searchValue}
+                        onChange={handleSearchChange}
+                    />
+
+                </Grid>
+
+                <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'end' }} >
+
+                    <Button id='RegisterButton'
+                        onClick={handleOpenRegisterModal}
+                        color="primary"
+                        variant="contained"
+                    >
+                        Cadastrar
+                    </Button>
+
+                </Grid>
+
+            </Grid>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -154,7 +160,7 @@ export default function TableClient() {
                                     <TableCell align="right">{user.cidade}</TableCell>
                                     <TableCell align="right">{user.uf}</TableCell>
                                     <TableCell align="right">
-                                        <Button id='EditButton' onClick={handleOpenEditModal} sx={{ color: '#707070' }}>
+                                        <Button id='EditButton' onClick={() => handleOpenEditModal(user)} sx={{ color: '#707070' }}>
                                             <EditIcon />
                                         </Button>
                                         <Button

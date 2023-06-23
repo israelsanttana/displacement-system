@@ -1,8 +1,9 @@
 'use client'
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useAPI } from '../Context/AppContext';
 import React from "react";
+import { UserType } from "../Clientes/listUsers";
 
 
 interface FormState {
@@ -23,30 +24,39 @@ export interface ModalClientProps {
     onClose: () => void;
     onUpdateTable: () => void;
     mode: "register" | "edit"
+    user?: UserType | null;
 }
 
-export default function ModalClient({ open, mode, onClose, onUpdateTable }: ModalClientProps) {
-    const { postAPIClient } = useAPI();
-    const [age, setAge] = React.useState('');
-
-
+export default function ModalClient({ open, mode, user, onClose, onUpdateTable }: ModalClientProps) {
+    const { postAPIClient, putAPIClient } = useAPI();
 
     const [formState, setFormState] = useState<FormState>({
-        numeroDocumento: "77777777",
-        tipoDocumento: "cpf",
-        nome: "Marcos",
-        logradouro: "Girasol",
-        numero: "57",
-        bairro: "Bom Retiro",
-        cidade: "São Paulo",
-        uf: "SP",
+        numeroDocumento: "",
+        tipoDocumento: "",
+        nome: "",
+        logradouro: "",
+        numero: "",
+        bairro: "",
+        cidade: "",
+        uf: "",
     });
 
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
-    };
-
+    useEffect(() => {
+        if (mode === "edit" && user) {
+            setFormState(user);
+        } else if (mode === "register") {
+            setFormState({
+                numeroDocumento: "",
+                tipoDocumento: "",
+                nome: "",
+                logradouro: "",
+                numero: "",
+                bairro: "",
+                cidade: "",
+                uf: "",
+            });
+        }
+    }, [mode, user]);
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -58,7 +68,11 @@ export default function ModalClient({ open, mode, onClose, onUpdateTable }: Moda
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-        await postAPIClient('v1/Cliente', formState);
+        if (mode === "register") {
+            await postAPIClient('v1/Cliente', formState);
+        } else if (mode === "edit") {
+            await putAPIClient(`v1/Cliente/${user?.id}`, formState);
+        }
         onClose();
         onUpdateTable();
     };
@@ -68,12 +82,10 @@ export default function ModalClient({ open, mode, onClose, onUpdateTable }: Moda
         <Dialog open={open}
             onClose={onClose}>
             <DialogTitle>
-                {mode === "register" ? "Novo cadastro" : "Editar cadastro"}
+                {mode === "register" ? "Novo cadastro" : "Editar registro"}
             </DialogTitle>
             <DialogContent onSubmit={handleSubmit}>
                 <DialogContentText sx={{ pb: 4 }}>
-                    To subscribe to this website, please enter your email address here. We
-                    will send updates occasionally.
                 </DialogContentText>
                 <Grid container spacing={3} >
                     <Grid item xs={12} >
@@ -87,42 +99,17 @@ export default function ModalClient({ open, mode, onClose, onUpdateTable }: Moda
                         />
 
                     </Grid>
-
-                    <Grid item xs={3} >
-                        <Select
-                            fullWidth
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="Age"
-                            name="input1"
-                            variant="outlined"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={10}>CPF</MenuItem>
-                            <MenuItem value={20}>RG</MenuItem>
-
-                        </Select>
-
-                    </Grid>
-                    <Grid item xs={9} >
+                    <Grid item xs={12} >
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="cpf"
+                            name="numeroDocumento"
                             label="CPF"
                             value={formState.numeroDocumento}
                             onChange={handleInputChange}
                         />
 
                     </Grid>
-                    {/*  <TextField
-                        variant="outlined"
-                        name="input3"
-                        label="Input 3"
-                        value={formState.tipoDocumento}
-                        onChange={handleInputChange}
-                    /> */}
                     <Grid item xs={9} >
                         <TextField
                             fullWidth
@@ -163,7 +150,7 @@ export default function ModalClient({ open, mode, onClose, onUpdateTable }: Moda
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="cidaded"
+                            name="cidade"
                             label="Cidade"
                             value={formState.cidade}
                             onChange={handleInputChange}
@@ -176,7 +163,7 @@ export default function ModalClient({ open, mode, onClose, onUpdateTable }: Moda
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="Estado"
+                            name="uf"
                             label="Estado"
                             value={formState.uf}
                             onChange={handleInputChange}
