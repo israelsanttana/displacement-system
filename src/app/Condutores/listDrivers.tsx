@@ -13,6 +13,8 @@ import { useAPI } from '../Context/AppContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { format } from 'date-fns';
+import ModalDrivers from '../components/modal-drivers';
+
 
 export interface DriverType {
     id: number;
@@ -82,13 +84,13 @@ export default function TableDrivers() {
     return (
         <>
             {
-                /* <ModalClient
+                <ModalDrivers
                     mode={modalMode}
                     open={isModalOpen}
                     onClose={handleCloseModal}
                     onUpdateTable={updateTable}
-                    user={editUser}
-                /> */
+                    driver={editUser}
+                />
             }
 
             <Grid container spacing={1} sx={{ mb: 3, mt: 3, flexWrap: 'wrap' }}
