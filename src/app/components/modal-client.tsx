@@ -7,7 +7,6 @@ import { UserType } from "../Clientes/listUsers";
 
 
 interface FormState {
-
     numeroDocumento: string,
     tipoDocumento: string,
     nome: string,

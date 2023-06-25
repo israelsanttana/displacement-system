@@ -75,6 +75,32 @@ export const getReqDrivers = async (endpoint: string) => {
     }
 };
 
+export const postReqDrivers = async (endpoint: string, dados: any) => {
+    try {
+        const response: AxiosResponse = await axios.post(`${baseURL}/${endpoint}`, dados, {
+            headers: {
+                'accept': 'text/plain',
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+
+    } catch (error) {
+        handleError;
+    }
+
+};
+
+export const putReqDrivers = async (endpoint: string, dados: any) => {
+    try {
+        const response: AxiosResponse = await axios.put(`${baseURL}/${endpoint}`, dados);
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
+
+
 export const deleteReqDrivers = async (id: number) => {
     try {
         const response: AxiosResponse = await axios.delete(`${baseURL}/v1/Condutor/${id}`, {

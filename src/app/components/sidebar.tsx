@@ -22,7 +22,7 @@ import MapIcon from '@mui/icons-material/Map';
 import PeopleIcon from '@mui/icons-material/People';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-
+import FlagIcon from '@mui/icons-material/Flag';
 
 
 
@@ -106,6 +106,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -115,6 +116,11 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
     };
 
     const LinksSidebar = [
+        {
+            title: 'Bem vindo',
+            href: '/',
+            icon: <FlagIcon />
+        },
         {
             title: 'Deslocamentos',
             href: '/Deslocamentos',
@@ -161,7 +167,8 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+
+            <Drawer variant="permanent" open={open} >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -169,6 +176,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                 </DrawerHeader>
                 <Divider />
                 <List>
+
                     {LinksSidebar.map((link) => (
                         <ListItem key={link.title} disablePadding sx={{ display: 'block' }}>
                             <Link style={{ textDecoration: 'none', color: 'black' }} href={link.href} passHref>
@@ -187,6 +195,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
                                         }}
                                     >
                                         {link.icon}
+
                                     </ListItemIcon>
 
                                     <ListItemText primary={link.title} sx={{ opacity: open ? 1 : 0 }} />

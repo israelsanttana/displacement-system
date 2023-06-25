@@ -1,10 +1,9 @@
 'use client'
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@mui/material";
 import { useAPI } from '../Context/AppContext';
 import React from "react";
 import { DriverType } from "../Condutores/listDrivers";
-
 
 interface FormState {
     nome: string;
@@ -23,7 +22,8 @@ export interface ModalDriversProps {
 }
 
 export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTable }: ModalDriversProps) {
-    const { postAPIClient, putAPIClient } = useAPI();
+    const { postAPIDrivers, putAPICDrivers } = useAPI();
+
 
     const [formState, setFormState] = useState<FormState>({
         nome: "",
@@ -31,6 +31,9 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
         catergoriaHabilitacao: "",
         vencimentoHabilitacao: "",
     });
+
+
+
 
     useEffect(() => {
         if (mode === "edit" && driver) {
@@ -45,6 +48,19 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
         }
     }, [mode, driver]);
 
+
+
+    const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault();
+        if (mode === "register") {
+            await postAPIDrivers('v1/Condutor', formState);
+        } else if (mode === "edit") {
+            await putAPICDrivers(`v1/Condutor/${driver?.id}`, formState);
+        }
+        onClose();
+        onUpdateTable();
+    };
+
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
         setFormState((prevFormState) => ({
@@ -53,23 +69,12 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
         }));
     }
 
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
-        if (mode === "register") {
-            await postAPIClient('v1/Cliente', formState);
-        } else if (mode === "edit") {
-            await putAPIClient(`v1/Cliente/${driver?.id}`, formState);
-        }
-        onClose();
-        onUpdateTable();
-    };
-
     return (
 
         <Dialog open={open}
             onClose={onClose}>
             <DialogTitle>
-                {mode === "register" ? "Novo cadastro" : "Editar registro"}
+                {mode === "register" ? "Novo condutor" : "Editar registro"}
             </DialogTitle>
             <DialogContent onSubmit={handleSubmit}>
                 <DialogContentText sx={{ pb: 1 }}>
@@ -101,7 +106,7 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="catergoriaHabilitacao"
+                            name="categoriaHabilitacao"
                             label="Categoria"
                             value={formState.catergoriaHabilitacao}
                             onChange={handleInputChange}
@@ -120,8 +125,6 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                         />
 
                     </Grid>
-
-
 
                 </Grid>
             </DialogContent>

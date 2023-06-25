@@ -41,6 +41,7 @@ export default function TableDrivers() {
     const fetchData = async () => {
         const response = await getAPIDrivers('v1/Condutor');
         setDriver(response);
+        console.log(response)
     };
 
     const updateTable = async () => {
