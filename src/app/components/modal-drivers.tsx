@@ -5,10 +5,11 @@ import { useAPI } from '../Context/AppContext';
 import React from "react";
 import { DriverType } from "../Condutores/listDrivers";
 
+
 interface FormState {
     nome: string;
     numeroHabilitacao: string,
-    catergoriaHabilitacao: string;
+    categoriaHabilitacao: string;
     vencimentoHabilitacao: string;
 
 }
@@ -19,47 +20,56 @@ export interface ModalDriversProps {
     onUpdateTable: () => void;
     mode: "register" | "edit"
     driver?: DriverType | null;
-}
+};
 
 export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTable }: ModalDriversProps) {
-    const { postAPIDrivers, putAPICDrivers } = useAPI();
-
+    const { postAPIDrivers, putAPIDrivers } = useAPI();
 
     const [formState, setFormState] = useState<FormState>({
         nome: "",
         numeroHabilitacao: "",
-        catergoriaHabilitacao: "",
+        categoriaHabilitacao: "",
         vencimentoHabilitacao: "",
     });
 
-
-
-
     useEffect(() => {
         if (mode === "edit" && driver) {
-            setFormState(driver);
+            setFormState({
+                nome: driver.nome,
+                numeroHabilitacao: driver.numeroHabilitacao,
+                categoriaHabilitacao: driver.catergoriaHabilitacao,
+                vencimentoHabilitacao: driver.vencimentoHabilitacao,
+            });
         } else if (mode === "register") {
             setFormState({
                 nome: "",
                 numeroHabilitacao: "",
-                catergoriaHabilitacao: "",
+                categoriaHabilitacao: "",
                 vencimentoHabilitacao: "",
             });
         }
     }, [mode, driver]);
 
-
-
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
+
+        const updatedFormState = {
+            id: driver?.id || 0,
+            categoriaHabilitacao: formState.categoriaHabilitacao,
+            vencimentoHabilitacao: formState.vencimentoHabilitacao
+        };
+
         if (mode === "register") {
             await postAPIDrivers('v1/Condutor', formState);
         } else if (mode === "edit") {
-            await putAPICDrivers(`v1/Condutor/${driver?.id}`, formState);
+            await putAPIDrivers(`v1/Condutor/${driver?.id}`, updatedFormState);
         }
+
         onClose();
         onUpdateTable();
     };
+
+
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -70,7 +80,6 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
     }
 
     return (
-
         <Dialog open={open}
             onClose={onClose}>
             <DialogTitle>
@@ -80,46 +89,52 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                 <DialogContentText sx={{ pb: 1 }}>
                 </DialogContentText>
                 <Grid container spacing={3} >
-                    <Grid item xs={12} >
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            name="nome"
-                            label="Nome"
-                            value={formState.nome}
-                            onChange={handleInputChange}
-                        />
+                    {mode === "register" && (
+                        <>
+                            <Grid item xs={12} >
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    name="nome"
+                                    label="Nome"
+                                    value={formState.nome}
+                                    onChange={handleInputChange}
+                                />
 
-                    </Grid>
-                    <Grid item xs={12} >
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            name="numeroHabilitacao"
-                            label="Nº Habilitação"
-                            value={formState.numeroHabilitacao}
-                            onChange={handleInputChange}
-                        />
+                            </Grid>
+                            <Grid item xs={12} >
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    name="numeroHabilitacao"
+                                    label="Nº Habilitação"
+                                    value={formState.numeroHabilitacao}
+                                    onChange={handleInputChange}
+                                />
 
-                    </Grid>
-                    <Grid item xs={9} >
+                            </Grid>
+                        </>
+                    )}
+                    <Grid item xs={4} >
                         <TextField
+
                             fullWidth
                             variant="outlined"
                             name="categoriaHabilitacao"
                             label="Categoria"
-                            value={formState.catergoriaHabilitacao}
+                            value={formState.categoriaHabilitacao}
                             onChange={handleInputChange}
                         />
 
                     </Grid>
 
-                    <Grid item xs={3} >
+                    <Grid item xs={6} >
                         <TextField
                             fullWidth
                             variant="outlined"
                             name="vencimentoHabilitacao"
                             label="Vencimento"
+                            type="date"
                             value={formState.vencimentoHabilitacao}
                             onChange={handleInputChange}
                         />
@@ -148,4 +163,4 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
             </DialogActions>
         </Dialog>
     );
-}
+};
