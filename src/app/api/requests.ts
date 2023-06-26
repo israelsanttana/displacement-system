@@ -93,7 +93,12 @@ export const postReqDrivers = async (endpoint: string, dados: any) => {
 
 export const putReqDrivers = async (endpoint: string, dados: any) => {
     try {
-        const response: AxiosResponse = await axios.put(`${baseURL}/${endpoint}`, dados);
+        const response: AxiosResponse = await axios.put(`${baseURL}/${endpoint}`, dados, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            }
+        });
         return response.data;
     } catch (error) {
         handleError;

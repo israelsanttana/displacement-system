@@ -12,7 +12,7 @@ interface API {
     getAPIDrivers: (endpoint: string) => Promise<any>;
     deleteAPIDrivers: (id: number) => Promise<any>;
     postAPIDrivers: (endpoint: string, dados: any) => Promise<any>;
-    putAPICDrivers: (endpoint: string, dados: any) => Promise<any>;
+    putAPIDrivers: (endpoint: string, dados: any) => Promise<any>;
 }
 
 interface APIProviderProps {
@@ -53,7 +53,7 @@ export const APIProvider = ({ children }: APIProviderProps) => {
         return data;
     };
 
-    const putAPICDrivers = async (endpoint: string, dados: any) => {
+    const putAPIDrivers = async (endpoint: string, dados: any) => {
         const data = await putReqDrivers(endpoint, dados);
         return data;
     };
@@ -69,7 +69,7 @@ export const APIProvider = ({ children }: APIProviderProps) => {
     };
 
     return (
-        <GlobalContext.Provider value={{ getAPIClient, postAPIClient, putAPIClient, deleteAPIClient, getAPIDrivers, deleteAPIDrivers, postAPIDrivers, putAPICDrivers }}>
+        <GlobalContext.Provider value={{ getAPIClient, postAPIClient, putAPIClient, deleteAPIClient, getAPIDrivers, deleteAPIDrivers, postAPIDrivers, putAPIDrivers }}>
             {children}
         </GlobalContext.Provider>
     );

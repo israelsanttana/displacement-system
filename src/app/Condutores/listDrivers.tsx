@@ -12,7 +12,7 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import ModalDrivers from '../components/modal-drivers';
 
 
@@ -32,6 +32,7 @@ export default function TableDrivers() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editUser, setEditUser] = useState<DriverType | null>(null);
     const [searchValue, setSearchValue] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -39,10 +40,14 @@ export default function TableDrivers() {
     }, []);
 
     const fetchData = async () => {
+        setLoading(true)
         const response = await getAPIDrivers('v1/Condutor');
+        setLoading(false)
         setDriver(response);
-        console.log(response)
+
     };
+
+
 
     const updateTable = async () => {
         if (searchValue.trim() === '') {
@@ -50,8 +55,11 @@ export default function TableDrivers() {
         } else {
             const response = await getAPIDrivers(`v1/Condutor?search=${searchValue}`);
             setDriver(response);
+
         }
+
     };
+
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -143,10 +151,11 @@ export default function TableDrivers() {
                     </TableHead>
                     <TableBody>
 
-                        {driver.length === 0 ? (
+                        {loading ? (
                             <TableRow>
                                 <TableCell colSpan={9}>Carregando...</TableCell>
                             </TableRow>
+
                         ) :
                             driver.map((driver: DriverType) => (
                                 <TableRow key={driver.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
