@@ -6,6 +6,7 @@ import React from "react";
 import { DriverType } from "../Condutores/listDrivers";
 
 
+
 interface FormState {
     nome: string;
     numeroHabilitacao: string,
@@ -33,14 +34,7 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
     });
 
     useEffect(() => {
-        if (mode === "edit" && driver) {
-            setFormState({
-                nome: driver.nome,
-                numeroHabilitacao: driver.numeroHabilitacao,
-                categoriaHabilitacao: driver.catergoriaHabilitacao,
-                vencimentoHabilitacao: driver.vencimentoHabilitacao,
-            });
-        } else if (mode === "register") {
+        if (mode === "register") {
             setFormState({
                 nome: "",
                 numeroHabilitacao: "",
@@ -134,7 +128,6 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                             variant="outlined"
                             name="vencimentoHabilitacao"
                             label="Vencimento"
-                            type="date"
                             value={formState.vencimentoHabilitacao}
                             onChange={handleInputChange}
                         />
@@ -156,9 +149,14 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                     </>
                 )}
                 {mode === "edit" && (
-                    <Button variant="outlined" onClick={handleSubmit}>
-                        Salvar
-                    </Button>
+                    <>
+                        <Button variant="outlined" onClick={handleSubmit}>
+                            Salvar
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={onClose}>
+                            Cancelar
+                        </Button>
+                    </>
                 )}
             </DialogActions>
         </Dialog>
