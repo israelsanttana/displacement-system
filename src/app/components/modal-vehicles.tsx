@@ -25,7 +25,7 @@ export interface ModalDriversProps {
 };
 
 export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateTable }: ModalDriversProps) {
-    const { postAPIVehicles, putAPIDrivers } = useAPI();
+    const { postAPIVehicles, putAPIVehicles } = useAPI();
 
 
     const [formState, setFormState] = useState<FormState>({
@@ -56,13 +56,17 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-
-
+        const updatedFormState = {
+            id: vehicles?.id || 0,
+            marcaModelo: formState.marcaModelo,
+            anoFabricacao: formState.anoFabricacao,
+            kmAtual: formState.kmAtual,
+        };
 
         if (mode === "register") {
             await postAPIVehicles('v1/Veiculo', formState);
         } else if (mode === "edit") {
-            await putAPIDrivers(`v1/Veiculo/${vehicles?.id}`, formState);
+            await putAPIVehicles(`v1/Veiculo/${vehicles?.id}`, updatedFormState);
         }
 
         onClose();
@@ -88,33 +92,36 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
             <DialogContent onSubmit={handleSubmit}>
                 <DialogContentText sx={{ pb: 1 }}>
                 </DialogContentText>
+
                 <Grid container spacing={3} >
+
                     {mode === "register" && (
-                        <>
-                            <Grid item xs={12} >
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    name="placa"
-                                    label="Placa"
-                                    value={formState.placa}
-                                    onChange={handleInputChange}
-                                />
+                        <Grid item xs={12} >
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                name="placa"
+                                label="Placa"
+                                value={formState.placa}
+                                onChange={handleInputChange}
+                            />
 
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    fullWidth
-                                    variant="outlined"
-                                    name="marcaModelo"
-                                    label="Modelo"
-                                    value={formState.marcaModelo}
-                                    onChange={handleInputChange}
-                                />
+                        </Grid>
 
-                            </Grid>
-                        </>
                     )}
+
+                    <Grid item xs={12} >
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            name="marcaModelo"
+                            label="Modelo"
+                            value={formState.marcaModelo}
+                            onChange={handleInputChange}
+                        />
+
+                    </Grid>
+
                     <Grid item xs={4} >
                         <TextField
                             fullWidth

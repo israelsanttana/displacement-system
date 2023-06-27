@@ -139,10 +139,10 @@ export default function TableVehicles() {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nome</TableCell>
-                            <TableCell align="right">Nº Habilitação</TableCell>
-                            <TableCell align="right">Categoria</TableCell>
-                            <TableCell align="right">Vencimento</TableCell>
+                            <TableCell>Placa</TableCell>
+                            <TableCell align="right">Modelo</TableCell>
+                            <TableCell align="right">Ano fabricação</TableCell>
+                            <TableCell align="right">Kilometragem atual</TableCell>
                             <TableCell align="right">Editar</TableCell>
                         </TableRow>
                     </TableHead>

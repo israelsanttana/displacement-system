@@ -149,3 +149,17 @@ export const postReqVehicles = async (endpoint: string, dados: any) => {
     }
 
 };
+
+export const putReqVehicles = async (endpoint: string, dados: any) => {
+    try {
+        const response: AxiosResponse = await axios.put(`${baseURL}/${endpoint}`, dados, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
