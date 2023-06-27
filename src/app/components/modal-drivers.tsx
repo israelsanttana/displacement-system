@@ -7,6 +7,8 @@ import { DriverType } from "../Condutores/listDrivers";
 
 
 
+
+
 interface FormState {
     nome: string;
     numeroHabilitacao: string,
@@ -26,6 +28,7 @@ export interface ModalDriversProps {
 export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTable }: ModalDriversProps) {
     const { postAPIDrivers, putAPIDrivers } = useAPI();
 
+
     const [formState, setFormState] = useState<FormState>({
         nome: "",
         numeroHabilitacao: "",
@@ -34,7 +37,14 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
     });
 
     useEffect(() => {
-        if (mode === "register") {
+        if (mode === "edit" && driver) {
+            setFormState({
+                nome: driver.nome,
+                numeroHabilitacao: driver.numeroHabilitacao,
+                categoriaHabilitacao: driver.catergoriaHabilitacao,
+                vencimentoHabilitacao: driver.vencimentoHabilitacao,
+            });
+        } else if (mode === "register") {
             setFormState({
                 nome: "",
                 numeroHabilitacao: "",
@@ -111,7 +121,6 @@ export default function ModalDrivers({ open, mode, driver, onClose, onUpdateTabl
                     )}
                     <Grid item xs={4} >
                         <TextField
-
                             fullWidth
                             variant="outlined"
                             name="categoriaHabilitacao"

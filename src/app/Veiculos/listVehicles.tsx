@@ -1,3 +1,4 @@
+
 'use client'
 import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
@@ -8,32 +9,29 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { Container, Grid, TextField, Typography } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
-import ModalClient from '../components/modal-client';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { format, set } from 'date-fns';
+import ModalDrivers from '../components/modal-drivers';
 
-export interface UserType {
+
+export interface DriverType {
     id: number;
-    numeroDocumento: string;
-    tipoDocumento: string;
     nome: string;
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
+    numeroHabilitacao: string,
+    catergoriaHabilitacao: string;
+    vencimentoHabilitacao: string;
 }
 
 
-export default function TableClient() {
-    const { getAPIClient, deleteAPIClient } = useAPI();
-    const [users, setUsers] = useState<UserType[]>([]);
+export default function TableVehicles() {
+    const { getAPIDrivers, deleteAPIDrivers } = useAPI();
+    const [driver, setDriver] = useState<DriverType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editUser, setEditUser] = useState<UserType | null>(null);
+    const [editUser, setEditUser] = useState<DriverType | null>(null);
     const [searchValue, setSearchValue] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -44,19 +42,25 @@ export default function TableClient() {
 
     const fetchData = async () => {
         setLoading(true)
-        const response = await getAPIClient('v1/Cliente');
+        const response = await getAPIDrivers('v1/Condutor');
         setLoading(false)
-        setUsers(response);
+        setDriver(response);
+
     };
+
+
 
     const updateTable = async () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIClient(`v1/Cliente?search=${searchValue}`);
-            setUsers(response);
+            const response = await getAPIDrivers(`v1/Condutor?search=${searchValue}`);
+            setDriver(response);
+
         }
+
     };
+
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -66,9 +70,9 @@ export default function TableClient() {
         setSearchValue(event.target.value);
     };
 
-    const handleDeleteUser = async (id: number) => {
+    const handleDeleteDrive = async (id: number) => {
         try {
-            await deleteAPIClient(id);
+            await deleteAPIDrivers(id);
             updateTable();
         } catch (error) {
             console.error('Ocorreu um erro ao deletar o usuário:', error);
@@ -80,7 +84,7 @@ export default function TableClient() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEditModal = (user: UserType) => {
+    const handleOpenEditModal = (user: DriverType) => {
         setModalMode('edit');
         setEditUser(user);
         setIsModalOpen(true);
@@ -89,13 +93,15 @@ export default function TableClient() {
 
     return (
         <>
-            <ModalClient
-                mode={modalMode}
-                open={isModalOpen}
-                onClose={handleCloseModal}
-                onUpdateTable={updateTable}
-                user={editUser}
-            />
+            {
+                <ModalDrivers
+                    mode={modalMode}
+                    open={isModalOpen}
+                    onClose={handleCloseModal}
+                    onUpdateTable={updateTable}
+                    driver={editUser}
+                />
+            }
 
             <Grid container spacing={1} sx={{ mb: 3, mt: 3, flexWrap: 'wrap' }}
                 columnSpacing={{ xs: 1, sm: 3, md: 3 }}
@@ -103,7 +109,7 @@ export default function TableClient() {
 
                 <Grid item xs={12} md={4}>
 
-                    <Typography variant="h4">Clientes</Typography>
+                    <Typography variant="h4">Veículos</Typography>
 
                 </Grid>
 
@@ -138,39 +144,45 @@ export default function TableClient() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Nome</TableCell>
-                            <TableCell align="right">CPF</TableCell>
-                            <TableCell align="right">Rua</TableCell>
-                            <TableCell align="right">Numero</TableCell>
-                            <TableCell align="right">Bairro</TableCell>
-                            <TableCell align="right">Cidade</TableCell>
-                            <TableCell align="right">Estado</TableCell>
+                            <TableCell align="right">Nº Habilitação</TableCell>
+                            <TableCell align="right">Categoria</TableCell>
+                            <TableCell align="right">Vencimento</TableCell>
                             <TableCell align="right">Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
+
                         {loading ? (
                             <TableRow>
                                 <TableCell colSpan={9}>Carregando...</TableCell>
                             </TableRow>
+
                         ) :
-                            users.map((user: UserType) => (
-                                <TableRow key={user.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            driver.map((driver: DriverType) => (
+                                <TableRow key={driver.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell component="th" scope="row">
-                                        {user.nome}
+                                        {driver.nome}
                                     </TableCell>
-                                    <TableCell align="right">{user.numeroDocumento}</TableCell>
-                                    <TableCell align="right">{user.logradouro}</TableCell>
-                                    <TableCell align="right">{user.numero}</TableCell>
-                                    <TableCell align="right">{user.bairro}</TableCell>
-                                    <TableCell align="right">{user.cidade}</TableCell>
-                                    <TableCell align="right">{user.uf}</TableCell>
                                     <TableCell align="right">
-                                        <Button id='EditButton' onClick={() => handleOpenEditModal(user)} sx={{ color: '#707070' }}>
+                                        {driver.numeroHabilitacao}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {driver.catergoriaHabilitacao}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {format
+                                            (new Date
+                                                (driver.vencimentoHabilitacao),
+                                                'dd/MM/yyyy')}
+                                    </TableCell>
+
+                                    <TableCell align="right">
+                                        <Button id='EditButton' onClick={() => handleOpenEditModal(driver)} sx={{ color: '#707070' }}>
                                             <EditIcon />
                                         </Button>
                                         <Button
                                             sx={{ color: '#707070' }}
-                                            onClick={() => handleDeleteUser(user.id)}
+                                            onClick={() => handleDeleteDrive(driver.id)}
                                         >
                                             <DeleteIcon />
                                         </Button>
