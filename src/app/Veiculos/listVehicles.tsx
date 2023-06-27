@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { format, set } from 'date-fns';
 import ModalDrivers from '../components/modal-drivers';
+import ModalVehicles from '../components/modal-vehicles';
 
 
 export interface DriverType {
@@ -94,7 +95,7 @@ export default function TableVehicles() {
     return (
         <>
             {
-                <ModalDrivers
+                <ModalVehicles
                     mode={modalMode}
                     open={isModalOpen}
                     onClose={handleCloseModal}

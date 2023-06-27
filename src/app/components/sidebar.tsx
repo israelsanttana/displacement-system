@@ -137,7 +137,7 @@ export default function MiniDrawer({ children }: MiniDrawerProps) {
             icon: <RecentActorsIcon />
         },
         {
-            title: 'Veiculos',
+            title: 'Veículos',
             href: '/Veiculos',
             icon: <DirectionsCarIcon />
         }
