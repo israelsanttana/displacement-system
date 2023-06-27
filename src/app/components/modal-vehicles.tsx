@@ -25,7 +25,7 @@ export interface ModalDriversProps {
 };
 
 export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateTable }: ModalDriversProps) {
-    const { postAPIDrivers, putAPIDrivers } = useAPI();
+    const { postAPIVehicles, putAPIDrivers } = useAPI();
 
 
     const [formState, setFormState] = useState<FormState>({
@@ -57,16 +57,12 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
-        const updatedFormState = {
-            id: vehicles?.id || 0,
-            categoriaHabilitacao: formState.anoFabricacao,
-            vencimentoHabilitacao: formState.marcaModelo
-        };
+
 
         if (mode === "register") {
-            await postAPIDrivers('v1/Condutor', formState);
+            await postAPIVehicles('v1/Veiculo', formState);
         } else if (mode === "edit") {
-            await putAPIDrivers(`v1/Condutor/${vehicles?.id}`, updatedFormState);
+            await putAPIDrivers(`v1/Veiculo/${vehicles?.id}`, formState);
         }
 
         onClose();
@@ -100,7 +96,7 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
                                     fullWidth
                                     variant="outlined"
                                     name="placa"
-                                    label="Nome"
+                                    label="Placa"
                                     value={formState.placa}
                                     onChange={handleInputChange}
                                 />
@@ -111,7 +107,7 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
                                     fullWidth
                                     variant="outlined"
                                     name="marcaModelo"
-                                    label="Nº Habilitação"
+                                    label="Modelo"
                                     value={formState.marcaModelo}
                                     onChange={handleInputChange}
                                 />
@@ -124,7 +120,7 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
                             fullWidth
                             variant="outlined"
                             name="anoFabricacao"
-                            label="Categoria"
+                            label="Ano Fabricação"
                             value={formState.anoFabricacao}
                             onChange={handleInputChange}
                         />
@@ -135,8 +131,8 @@ export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateT
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name=".kmAtual"
-                            label="Vencimento"
+                            name="kmAtual"
+                            label="Kilometragem atual"
                             value={formState.kmAtual}
                             onChange={handleInputChange}
                         />

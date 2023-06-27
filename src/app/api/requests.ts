@@ -133,3 +133,19 @@ export const getReqVehicles = async (endpoint: string) => {
         handleError;
     }
 };
+
+export const postReqVehicles = async (endpoint: string, dados: any) => {
+    try {
+        const response: AxiosResponse = await axios.post(`${baseURL}/${endpoint}`, dados, {
+            headers: {
+                'accept': 'text/plain',
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+
+    } catch (error) {
+        handleError;
+    }
+
+};
