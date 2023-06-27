@@ -123,3 +123,13 @@ export const deleteReqDrivers = async (id: number) => {
     }
 };
 
+/* REQ VEHICLES*/
+
+export const getReqVehicles = async (endpoint: string) => {
+    try {
+        const response: AxiosResponse = await axios.get(`${baseURL}/${endpoint}`);
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};

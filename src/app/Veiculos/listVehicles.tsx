@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
@@ -13,26 +12,24 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { format, set } from 'date-fns';
-import ModalDrivers from '../components/modal-drivers';
 import ModalVehicles from '../components/modal-vehicles';
 
 
-export interface DriverType {
+export interface VehicleType {
     id: number;
-    nome: string;
-    numeroHabilitacao: string,
-    catergoriaHabilitacao: string;
-    vencimentoHabilitacao: string;
+    placa: string;
+    marcaModelo: string,
+    anoFabricacao: string;
+    kmAtual: string;
 }
 
 
 export default function TableVehicles() {
-    const { getAPIDrivers, deleteAPIDrivers } = useAPI();
-    const [driver, setDriver] = useState<DriverType[]>([]);
+    const { getAPIVehicles, deleteAPIDrivers } = useAPI();
+    const [vehicles, setVehicles] = useState<VehicleType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editUser, setEditUser] = useState<DriverType | null>(null);
+    const [editUser, setEditUser] = useState<VehicleType | null>(null);
     const [searchValue, setSearchValue] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -43,20 +40,18 @@ export default function TableVehicles() {
 
     const fetchData = async () => {
         setLoading(true)
-        const response = await getAPIDrivers('v1/Condutor');
+        const response = await getAPIVehicles('v1/Veiculo');
         setLoading(false)
-        setDriver(response);
+        setVehicles(response);
 
     };
-
-
 
     const updateTable = async () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIDrivers(`v1/Condutor?search=${searchValue}`);
-            setDriver(response);
+            const response = await getAPIVehicles(`v1/Veiculo?search=${searchValue}`);
+            setVehicles(response);
 
         }
 
@@ -85,7 +80,7 @@ export default function TableVehicles() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEditModal = (user: DriverType) => {
+    const handleOpenEditModal = (user: VehicleType) => {
         setModalMode('edit');
         setEditUser(user);
         setIsModalOpen(true);
@@ -100,7 +95,7 @@ export default function TableVehicles() {
                     open={isModalOpen}
                     onClose={handleCloseModal}
                     onUpdateTable={updateTable}
-                    driver={editUser}
+                    vehicles={editUser}
                 />
             }
 
@@ -159,31 +154,28 @@ export default function TableVehicles() {
                             </TableRow>
 
                         ) :
-                            driver.map((driver: DriverType) => (
-                                <TableRow key={driver.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            vehicles.map((vehicles: VehicleType) => (
+                                <TableRow key={vehicles.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell component="th" scope="row">
-                                        {driver.nome}
+                                        {vehicles.placa}
                                     </TableCell>
                                     <TableCell align="right">
-                                        {driver.numeroHabilitacao}
+                                        {vehicles.marcaModelo}
                                     </TableCell>
                                     <TableCell align="right">
-                                        {driver.catergoriaHabilitacao}
+                                        {vehicles.anoFabricacao}
                                     </TableCell>
                                     <TableCell align="right">
-                                        {format
-                                            (new Date
-                                                (driver.vencimentoHabilitacao),
-                                                'dd/MM/yyyy')}
+                                        {vehicles.kmAtual}
                                     </TableCell>
 
                                     <TableCell align="right">
-                                        <Button id='EditButton' onClick={() => handleOpenEditModal(driver)} sx={{ color: '#707070' }}>
+                                        <Button id='EditButton' onClick={() => handleOpenEditModal(vehicles)} sx={{ color: '#707070' }}>
                                             <EditIcon />
                                         </Button>
                                         <Button
                                             sx={{ color: '#707070' }}
-                                            onClick={() => handleDeleteDrive(driver.id)}
+                                            onClick={() => handleDeleteDrive(vehicles.id)}
                                         >
                                             <DeleteIcon />
                                         </Button>

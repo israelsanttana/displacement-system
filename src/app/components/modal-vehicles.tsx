@@ -1,17 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@mui/material";
 import { useAPI } from '../Context/AppContext';
 import React from "react";
-import { DriverType } from "../Condutores/listDrivers";
+import { VehicleType } from "../Veiculos/listVehicles";
 
 
 
 interface FormState {
-    nome: string;
-    numeroHabilitacao: string,
-    categoriaHabilitacao: string;
-    vencimentoHabilitacao: string;
+    placa: string;
+    marcaModelo: string,
+    anoFabricacao: string;
+    kmAtual: string;
 
 }
 
@@ -20,52 +21,52 @@ export interface ModalDriversProps {
     onClose: () => void;
     onUpdateTable: () => void;
     mode: "register" | "edit"
-    driver?: DriverType | null;
+    vehicles?: VehicleType | null;
 };
 
-export default function ModalVehicles({ open, mode, driver, onClose, onUpdateTable }: ModalDriversProps) {
+export default function ModalVehicles({ open, mode, vehicles, onClose, onUpdateTable }: ModalDriversProps) {
     const { postAPIDrivers, putAPIDrivers } = useAPI();
 
 
     const [formState, setFormState] = useState<FormState>({
-        nome: "",
-        numeroHabilitacao: "",
-        categoriaHabilitacao: "",
-        vencimentoHabilitacao: "",
+        placa: "",
+        marcaModelo: "",
+        anoFabricacao: "",
+        kmAtual: "",
     });
 
 
     useEffect(() => {
-        if (mode === "edit" && driver) {
+        if (mode === "edit" && vehicles) {
             setFormState({
-                nome: driver.nome,
-                numeroHabilitacao: driver.numeroHabilitacao,
-                categoriaHabilitacao: driver.catergoriaHabilitacao,
-                vencimentoHabilitacao: driver.vencimentoHabilitacao,
+                placa: vehicles.placa,
+                marcaModelo: vehicles.marcaModelo,
+                anoFabricacao: vehicles.anoFabricacao,
+                kmAtual: vehicles.kmAtual
             });
         } else if (mode === "register") {
             setFormState({
-                nome: "",
-                numeroHabilitacao: "",
-                categoriaHabilitacao: "",
-                vencimentoHabilitacao: "",
+                placa: "",
+                marcaModelo: "",
+                anoFabricacao: "",
+                kmAtual: "",
             });
         }
-    }, [mode, driver]);
+    }, [mode, vehicles]);
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
         const updatedFormState = {
-            id: driver?.id || 0,
-            categoriaHabilitacao: formState.categoriaHabilitacao,
-            vencimentoHabilitacao: formState.vencimentoHabilitacao
+            id: vehicles?.id || 0,
+            categoriaHabilitacao: formState.anoFabricacao,
+            vencimentoHabilitacao: formState.marcaModelo
         };
 
         if (mode === "register") {
             await postAPIDrivers('v1/Condutor', formState);
         } else if (mode === "edit") {
-            await putAPIDrivers(`v1/Condutor/${driver?.id}`, updatedFormState);
+            await putAPIDrivers(`v1/Condutor/${vehicles?.id}`, updatedFormState);
         }
 
         onClose();
@@ -98,9 +99,9 @@ export default function ModalVehicles({ open, mode, driver, onClose, onUpdateTab
                                 <TextField
                                     fullWidth
                                     variant="outlined"
-                                    name="nome"
+                                    name="placa"
                                     label="Nome"
-                                    value={formState.nome}
+                                    value={formState.placa}
                                     onChange={handleInputChange}
                                 />
 
@@ -109,9 +110,9 @@ export default function ModalVehicles({ open, mode, driver, onClose, onUpdateTab
                                 <TextField
                                     fullWidth
                                     variant="outlined"
-                                    name="numeroHabilitacao"
+                                    name="marcaModelo"
                                     label="Nº Habilitação"
-                                    value={formState.numeroHabilitacao}
+                                    value={formState.marcaModelo}
                                     onChange={handleInputChange}
                                 />
 
@@ -122,9 +123,9 @@ export default function ModalVehicles({ open, mode, driver, onClose, onUpdateTab
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="categoriaHabilitacao"
+                            name="anoFabricacao"
                             label="Categoria"
-                            value={formState.categoriaHabilitacao}
+                            value={formState.anoFabricacao}
                             onChange={handleInputChange}
                         />
 
@@ -134,9 +135,9 @@ export default function ModalVehicles({ open, mode, driver, onClose, onUpdateTab
                         <TextField
                             fullWidth
                             variant="outlined"
-                            name="vencimentoHabilitacao"
+                            name=".kmAtual"
                             label="Vencimento"
-                            value={formState.vencimentoHabilitacao}
+                            value={formState.kmAtual}
                             onChange={handleInputChange}
                         />
 

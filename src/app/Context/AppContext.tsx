@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, ReactNode } from 'react'
-import { getReqClient, postReqClient, putReqClient, deleteReqClient, getReqDrivers, deleteReqDrivers, postReqDrivers, putReqDrivers } from '../api/requests'
+import { getReqClient, postReqClient, putReqClient, deleteReqClient, getReqDrivers, deleteReqDrivers, postReqDrivers, putReqDrivers, getReqVehicles } from '../api/requests'
 
 interface API {
     getAPIClient: (endpoint: string) => Promise<any>;
@@ -13,6 +13,8 @@ interface API {
     deleteAPIDrivers: (id: number) => Promise<any>;
     postAPIDrivers: (endpoint: string, dados: any) => Promise<any>;
     putAPIDrivers: (endpoint: string, dados: any) => Promise<any>;
+
+    getAPIVehicles: (endpoint: string) => Promise<any>;
 }
 
 interface APIProviderProps {
@@ -68,8 +70,19 @@ export const APIProvider = ({ children }: APIProviderProps) => {
         return data;
     };
 
+    /* REQ VEHICLES */
+
+    const getAPIVehicles = async (endpoint: string) => {
+        const data = await getReqVehicles(endpoint);
+        return data;
+    };
+
+
+
+
+
     return (
-        <GlobalContext.Provider value={{ getAPIClient, postAPIClient, putAPIClient, deleteAPIClient, getAPIDrivers, deleteAPIDrivers, postAPIDrivers, putAPIDrivers }}>
+        <GlobalContext.Provider value={{ getAPIClient, postAPIClient, putAPIClient, deleteAPIClient, getAPIDrivers, deleteAPIDrivers, postAPIDrivers, putAPIDrivers, getAPIVehicles }}>
             {children}
         </GlobalContext.Provider>
     );
