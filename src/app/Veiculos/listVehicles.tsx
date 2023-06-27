@@ -25,7 +25,7 @@ export interface VehicleType {
 
 
 export default function TableVehicles() {
-    const { getAPIVehicles, deleteAPIDrivers } = useAPI();
+    const { getAPIVehicles, deleteAPIVehicles } = useAPI();
     const [vehicles, setVehicles] = useState<VehicleType[]>([]);
     const [modalMode, setModalMode] = useState<'register' | 'edit'>('register');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,9 +66,9 @@ export default function TableVehicles() {
         setSearchValue(event.target.value);
     };
 
-    const handleDeleteDrive = async (id: number) => {
+    const handleDeleteVehicles = async (id: number) => {
         try {
-            await deleteAPIDrivers(id);
+            await deleteAPIVehicles(id);
             updateTable();
         } catch (error) {
             console.error('Ocorreu um erro ao deletar o usuário:', error);
@@ -175,7 +175,7 @@ export default function TableVehicles() {
                                         </Button>
                                         <Button
                                             sx={{ color: '#707070' }}
-                                            onClick={() => handleDeleteDrive(vehicles.id)}
+                                            onClick={() => handleDeleteVehicles(vehicles.id)}
                                         >
                                             <DeleteIcon />
                                         </Button>

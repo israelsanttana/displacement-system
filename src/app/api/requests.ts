@@ -3,7 +3,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 const baseURL = 'https://api-deslocamento.herokuapp.com/api';
 
-// Função auxiliar para tratamento de erros
+
 const handleError = (error: AxiosError) => {
     console.error('Ocorreu um erro na requisição:', error);
     throw error;
@@ -156,6 +156,23 @@ export const putReqVehicles = async (endpoint: string, dados: any) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': '*/*'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
+
+export const deleteReqVehicles = async (id: number) => {
+    try {
+        const response: AxiosResponse = await axios.delete(`${baseURL}/v1/Veiculo/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            },
+            data: {
+                id: id
             }
         });
         return response.data;
