@@ -185,9 +185,14 @@ export default function ModalClient({ open, mode, user, onClose, onUpdateTable }
                     </>
                 )}
                 {mode === "edit" && (
-                    <Button variant="outlined" onClick={handleSubmit}>
-                        Salvar
-                    </Button>
+                    <>
+                        <Button variant="outlined" onClick={handleSubmit}>
+                            Salvar
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={onClose}>
+                            Cancelar
+                        </Button>
+                    </>
                 )}
             </DialogActions>
         </Dialog>

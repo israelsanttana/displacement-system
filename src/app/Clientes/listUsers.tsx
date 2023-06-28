@@ -8,8 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { Container, Grid, TextField, Typography } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import ModalClient from '../components/modal-client';
 import EditIcon from '@mui/icons-material/Edit';
@@ -49,12 +48,14 @@ export default function TableClient() {
         setUsers(response);
     };
 
-    const updateTable = async () => {
+    const updateTable = () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIClient(`v1/Cliente?search=${searchValue}`);
-            setUsers(response);
+            const filteredUsers = users.filter((user) =>
+                user.nome.toLowerCase().includes(searchValue.toLowerCase())
+            );
+            setUsers(filteredUsers);
         }
     };
 
@@ -64,6 +65,11 @@ export default function TableClient() {
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(event.target.value);
+        if (event.target.value.trim() === '') {
+            fetchData();
+        } else {
+            updateTable();
+        }
     };
 
     const handleDeleteUser = async (id: number) => {
