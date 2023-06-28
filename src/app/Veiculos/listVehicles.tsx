@@ -46,15 +46,24 @@ export default function TableVehicles() {
 
     };
 
-    const updateTable = async () => {
+    const updateTable = () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIVehicles(`v1/Veiculo?search=${searchValue}`);
-            setVehicles(response);
-
+            const filteredUsers = vehicles.filter((vehicles) =>
+                vehicles.placa.toLowerCase().includes(searchValue.toLowerCase())
+            );
+            setVehicles(filteredUsers);
         }
+    };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(event.target.value);
+        if (event.target.value.trim() === '') {
+            fetchData();
+        } else {
+            updateTable();
+        }
     };
 
 
@@ -62,9 +71,7 @@ export default function TableVehicles() {
         setIsModalOpen(false);
     };
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValue(event.target.value);
-    };
+
 
     const handleDeleteVehicles = async (id: number) => {
         try {
