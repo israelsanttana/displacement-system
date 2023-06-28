@@ -47,17 +47,24 @@ export default function TableDrivers() {
 
     };
 
-
-
-    const updateTable = async () => {
+    const updateTable = () => {
         if (searchValue.trim() === '') {
             fetchData();
         } else {
-            const response = await getAPIDrivers(`v1/Condutor?search=${searchValue}`);
-            setDriver(response);
-
+            const filteredUsers = driver.filter((driver) =>
+                driver.nome.toLowerCase().includes(searchValue.toLowerCase())
+            );
+            setDriver(filteredUsers);
         }
+    };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(event.target.value);
+        if (event.target.value.trim() === '') {
+            fetchData();
+        } else {
+            updateTable();
+        }
     };
 
 
@@ -65,9 +72,7 @@ export default function TableDrivers() {
         setIsModalOpen(false);
     };
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValue(event.target.value);
-    };
+
 
     const handleDeleteDrive = async (id: number) => {
         try {
