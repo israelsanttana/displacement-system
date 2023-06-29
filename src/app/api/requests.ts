@@ -9,6 +9,16 @@ const handleError = (error: AxiosError) => {
     throw error;
 };
 
+export const getReqDisplacements = async (endpoint: string) => {
+    try {
+        const response: AxiosResponse = await axios.get(`${baseURL}/${endpoint}`);
+        return response.data;
+    } catch (error) {
+        handleError;
+    }
+};
+
+/* REQ CLIENT*/
 
 export const getReqClient = async (endpoint: string) => {
     try {

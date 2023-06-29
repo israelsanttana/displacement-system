@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import { Grid, TextField, Typography } from '@mui/material';
+import { CircularProgress, Grid, TextField, Typography } from '@mui/material';
 import { useAPI } from '../Context/AppContext';
 import ModalClient from '../components/modal-client';
 import EditIcon from '@mui/icons-material/Edit';
@@ -154,11 +154,8 @@ export default function TableClient() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {loading ? (
-                            <TableRow>
-                                <TableCell colSpan={9}>Carregando...</TableCell>
-                            </TableRow>
-                        ) :
+                        {loading ? <CircularProgress /> : (
+
                             users.map((user: UserType) => (
                                 <TableRow key={user.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell component="th" scope="row">
@@ -182,7 +179,7 @@ export default function TableClient() {
                                         </Button>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )))}
                     </TableBody>
                 </Table>
             </TableContainer>
